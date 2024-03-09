@@ -1,0 +1,12 @@
+<resources>
+    <declare-styleable name="SurfaceGroupView">
+        <attr name="headerText" format="string" />
+        <attr name="useDefaultBackgroundColor" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="DividerRecyclerView">
+        <attr name="dividerColor" format="color|reference" />
+        <attr name="dividerThickness" format="dimension" />
+        <attr name="dividerInsetEnd" />
+        <attr name="dividerInsetStart" />
+    </declare-styleable>
+</resources>

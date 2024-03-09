@@ -5,6 +5,7 @@
         <item name="collapsingToolbarLayoutLargeSize">@dimen/collapsing_toolbar_large_size</item>
         <item name="collapsingToolbarLayoutLargeStyle">@style/AppTheme.CollapsingToolbar</item>
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
+        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
 
         <item name="fontFamily">@font/gilroy</item>
         <item name="android:fontFamily">@font/gilroy</item>

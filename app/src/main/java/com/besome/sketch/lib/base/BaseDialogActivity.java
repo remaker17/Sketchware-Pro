@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.elevation.SurfaceColors;
 import com.sketchware.remod.R;
 
 import a.a.a.mB;
@@ -27,6 +29,8 @@ public class BaseDialogActivity extends BaseAppCompatActivity {
     public TextView r; // dialogPositiveButton
     public TextView s; // dialogNegativeButton
 
+    private MaterialCardView backgroundCard;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,7 @@ public class BaseDialogActivity extends BaseAppCompatActivity {
         View decor = getWindow().getDecorView();
         decor.setSystemUiVisibility(0);
 
+        backgroundCard = findViewById(R.id.background_card);
         dialogIcon = findViewById(R.id.common_dialog_icon);
         dialogContainerView = findViewById(R.id.common_dialog_container);
         dialogContentView = findViewById(R.id.common_dialog_content);
@@ -55,6 +60,9 @@ public class BaseDialogActivity extends BaseAppCompatActivity {
             }
         });
         dialogIcon.setVisibility(View.GONE);
+
+        int backgroundColor = SurfaceColors.SURFACE_3.getColor(this);
+        backgroundCard.setCardBackgroundColor(backgroundColor);
     }
 
     @Override

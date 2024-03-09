@@ -6,10 +6,12 @@
         <item name="titleCollapseMode">scale</item>
     </style>
 
-    <style name="AppTheme.Design.Toolbar" parent="Widget.Material3.Toolbar">
+    <style name="AppTheme.Design.Toolbar" parent="AppTheme.Toolbar">
         <item name="titleTextAppearance">?attr/textAppearanceBodyLarge</item>
         <item name="subtitleTextAppearance">?attr/textAppearanceBodyMedium</item>
     </style>
+
+    <style name="AppTheme.Toolbar" parent="Widget.Material3.Toolbar.OnSurface" />
 
     <style name="AppTheme.Check.White" parent="@style/Base.Widget.AppCompat.CompoundButton.CheckBox">
         <item name="colorControlActivated">@color/color_chk_white_highlight</item>
@@ -49,8 +51,13 @@
         <item name="itemShapeInsetEnd">@dimen/main_drawer_shape_horizontal_inset</item>
         <item name="itemShapeInsetStart">@dimen/main_drawer_shape_horizontal_inset</item>
         <item name="itemTextAppearance">?attr/textAppearanceBodyMedium</item>
+        <item name="materialThemeOverlay">@style/MainDrawer.ThemeOverlay</item>
         <item name="subheaderInsetEnd">@dimen/main_drawer_horizontal_padding</item>
         <item name="subheaderInsetStart">@dimen/main_drawer_horizontal_padding</item>
+    </style>
+
+    <style name="MainDrawer.ThemeOverlay" parent="ThemeOverlay.Material3.NavigationView">
+        <item name="android:listDivider">?attr/colorOutlineVariant</item>
     </style>
 
     <style name="MainTabLayout" parent="@style/Widget.Design.TabLayout">
@@ -93,7 +100,7 @@
         <item name="android:minHeight">3dp</item>
     </style>
 
-    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="TextInputLayoutStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:paddingHorizontal">0dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:bottomLeftRadius">14dp</item>

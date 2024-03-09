@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -194,35 +195,16 @@ public class AddViewActivity extends BaseDialogActivity {
         binding.featureTypes.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         binding.featureTypes.setHasFixedSize(true);
         binding.featureTypes.setAdapter(featuresAdapter);
-        binding.tvScreenOrientation.setText(getTranslatedString(R.string.design_manager_view_title_screen_orientation));
-        binding.tvKeyboard.setText(getTranslatedString(R.string.design_manager_view_title_keyboad_settings));
-        binding.addViewTypeSelector.a(0, "Activity");
-        binding.addViewTypeSelector.a(1, "Fragment");
-        binding.addViewTypeSelector.a(2, "DialogFragment");
-        binding.addViewTypeSelector.a();
-        binding.btnbarOrientation.a(0, "Portrait");
-        binding.btnbarOrientation.a(1, "Landscape");
-        binding.btnbarOrientation.a(2, "Both");
-        binding.btnbarOrientation.a();
-        binding.btnbarKeyboard.a(0, "Unspecified");
-        binding.btnbarKeyboard.a(1, "Visible");
-        binding.btnbarKeyboard.a(2, "Hidden");
-        binding.btnbarKeyboard.a();
-        binding.btnbarKeyboard.setListener(i -> {
-            if (0 == i || 1 == i) {
-                resetTranslationY(binding.activityPreview);
-            } else if (2 == i) {
-                binding.activityPreview.animate().translationY((float) binding.imgKeyboard.getMeasuredHeight()).start();
-            }
-        });
+        binding.keyboardGroup.addOnButtonCheckedListener((group, checkedId, isChecked) ->
+                updateKeyboardGroupState(group.getCheckedButtonId()));
         d(getTranslatedString(R.string.common_word_add));
         b(getTranslatedString(R.string.common_word_cancel));
 
         super.r.setOnClickListener(v -> {
             int options = ProjectFileBean.OPTION_ACTIVITY_TOOLBAR;
             if (265 == requestCode) {
-                projectFileBean.orientation = binding.btnbarOrientation.getSelectedItemKey();
-                projectFileBean.keyboardSetting = binding.btnbarKeyboard.getSelectedItemKey();
+                projectFileBean.orientation = getOrientationKey(binding.orientationGroup.getCheckedButtonId());
+                projectFileBean.keyboardSetting = getKeyboardKey(binding.keyboardGroup.getCheckedButtonId());
                 if (!featureToolbar) {
                     options = 0;
                 }
@@ -242,10 +224,11 @@ public class AddViewActivity extends BaseDialogActivity {
                 bB.a(getApplicationContext(), xB.b().a(getApplicationContext(), R.string.design_manager_message_edit_complete, new Object[0]), 0).show();
                 finish();
             } else if (isValid(nameValidator)) {
-                String var4 = binding.edName.getText().toString() + getSuffix(binding.addViewTypeSelector);
+                String var4 = binding.edName.getText().toString() + getTypeSuffix(binding.typeGroup.getCheckedButtonId());
+                int orientationKey = getOrientationKey(binding.orientationGroup.getCheckedButtonId());
+                int keyboardKey = getKeyboardKey(binding.keyboardGroup.getCheckedButtonId());
                 ProjectFileBean projectFileBean = new ProjectFileBean(0, var4,
-                        binding.btnbarOrientation.getSelectedItemKey(),
-                        binding.btnbarKeyboard.getSelectedItemKey(),
+                        orientationKey, keyboardKey,
                         featureToolbar, !featureStatusBar,
                         featureFab, featureDrawer);
                 Intent intent = new Intent();
@@ -269,9 +252,10 @@ public class AddViewActivity extends BaseDialogActivity {
             binding.edName.setEnabled(false);
             binding.edName.setBackgroundResource(R.color.transparent);
             initItem(projectFileBean.options);
-            binding.addViewTypeSelectorLayout.setVisibility(View.GONE);
-            binding.btnbarOrientation.setSelectedItemByKey(projectFileBean.orientation);
-            binding.btnbarKeyboard.setSelectedItemByKey(projectFileBean.keyboardSetting);
+            binding.typeGroupWrapper.setVisibility(View.GONE);
+            binding.orientationGroup.check(getOrientationIdByKey(projectFileBean.orientation));
+            binding.keyboardGroup.check(getKeyboardIdByKey(projectFileBean.keyboardSetting));
+            updateKeyboardGroupState(binding.keyboardGroup.getCheckedButtonId());
             super.r.setText(getTranslatedString(R.string.common_word_save).toUpperCase());
         } else {
             featureToolbar = true;
@@ -281,11 +265,52 @@ public class AddViewActivity extends BaseDialogActivity {
         initializeItems();
     }
 
-    private String getSuffix(SelectableButtonBar buttonBar) {
-        return switch (buttonBar.getSelectedItemKey()) {
-            case 1 -> "_fragment";
-            case 2 -> "_dialog_fragment";
+    private void updateKeyboardGroupState(int checkedId) {
+        if (checkedId == R.id.keyboard_unspecified || checkedId == R.id.keyboard_visible) {
+            resetTranslationY(binding.imgKeyboard);
+        } else if (checkedId == R.id.keyboard_hidden) {
+            // binding.activityPreview.animate().translationY((float) binding.imgKeyboard.getMeasuredHeight()).start();
+            binding.imgKeyboard.animate().translationY((float) binding.imgKeyboard.getMeasuredHeight()).start();
+        }
+    }
+
+    private String getTypeSuffix(int checkedId) {
+        return switch (checkedId) {
+            case R.id.type_fragment -> "_fragment";
+            case R.id.type_dialog_fragment -> "_dialog_fragment";
             default -> "";
+        };
+    }
+
+    private int getOrientationKey(int checkedId) {
+        return switch (checkedId) {
+            case R.id.orientation_landscape -> 1;
+            case R.id.orientation_both -> 2;
+            default -> 0; // portrait
+        };
+    }
+
+    private @IdRes int getOrientationIdByKey(int key) {
+        return switch (key) {
+            case 1 -> R.id.orientation_landscape;
+            case 2 -> R.id.orientation_both;
+            default -> R.id.orientation_portrait;
+        };
+    }
+
+    private int getKeyboardKey(int checkedId) {
+        return switch (checkedId) {
+            case R.id.keyboard_visible -> 1;
+            case R.id.keyboard_hidden -> 2;
+            default -> 0; // unspecified
+        };
+    }
+
+    private @IdRes int getKeyboardIdByKey(int key) {
+        return switch (key) {
+            case 1 -> R.id.keyboard_visible;
+            case 2 -> R.id.keyboard_hidden;
+            default -> R.id.keyboard_unspecified;
         };
     }
 

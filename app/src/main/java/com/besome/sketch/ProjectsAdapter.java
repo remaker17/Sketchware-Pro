@@ -23,6 +23,8 @@ import com.besome.sketch.projects.MyProjectButton;
 import com.besome.sketch.projects.MyProjectButtonLayout;
 import com.besome.sketch.projects.MyProjectSettingActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.elevation.SurfaceColors;
 import com.sketchware.remod.R;
 import com.sketchware.remod.databinding.BottomSheetProjectOptionsBinding;
 
@@ -316,11 +318,13 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public final TextView appName;
         public final TextView packageName;
         public final TextView projectVersion;
+        private final MaterialCardView backgroundCard;
 
         private Map<String, Object> project;
 
         public ProjectViewHolder(View itemView) {
             super(itemView, 300);
+            backgroundCard = itemView.findViewById(R.id.background_card);
             projectView = itemView.findViewById(R.id.project_one);
             projectName = itemView.findViewById(R.id.project_name);
             appIconLayout = itemView.findViewById(R.id.app_icon_layout);
@@ -333,6 +337,12 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             projectOptionLayout = itemView.findViewById(R.id.project_option_layout);
             projectButtonLayout = itemView.findViewById(R.id.project_option);
             onDoneInitializingViews();
+            paintBackgroundColor();
+        }
+
+        private void paintBackgroundColor() {
+            int backgroundColor = SurfaceColors.SURFACE_2.getColor(backgroundCard.getContext());
+            backgroundCard.setCardBackgroundColor(backgroundColor);
         }
 
         @Override
@@ -376,11 +386,13 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class SpecialActionViewHolder extends RecyclerView.ViewHolder {
         public final ImageView icon;
         public final TextView title;
+        private final MaterialCardView backgroundCard;
 
         private boolean isNewProjectAction = true;
 
         public SpecialActionViewHolder(@NonNull View itemView) {
             super(itemView);
+            backgroundCard = itemView.findViewById(R.id.background_card);
             icon = itemView.findViewById(R.id.iv_create_new);
             title = itemView.findViewById(R.id.tv_create_new);
             itemView.findViewById(R.id.project_one).setOnClickListener(v -> {
@@ -390,6 +402,12 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     projectsFragment.restoreProject();
                 }
             });
+            paintBackgroundColor();
+        }
+
+        private void paintBackgroundColor() {
+            int backgroundColor = SurfaceColors.SURFACE_2.getColor(backgroundCard.getContext());
+            backgroundCard.setCardBackgroundColor(backgroundColor);
         }
 
         public void setIsNewProjectAction(boolean b) {

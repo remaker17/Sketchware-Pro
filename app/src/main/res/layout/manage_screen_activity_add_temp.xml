@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:paddingHorizontal="16dp">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,12 +15,19 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@id/activity_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="136dp"
+            android:layout_height="0dp"
+            app:cardCornerRadius="8dp"
+            app:strokeColor="?attr/colorOutline"
+            app:layout_constraintDimensionRatio="H,9:16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/feature_types">
 
             <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="240dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/border_shadow">
 
                 <LinearLayout
@@ -29,14 +35,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_below="@id/preview_statusbar"
-                    android:background="@color/color_primary"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:padding="8dp">
 
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/arrow_back_white_48dp" />
+                        android:src="@drawable/arrow_back_white_48dp"
+                        app:tint="?attr/colorOnSurface" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -65,7 +72,7 @@
                     android:layout_width="90dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
-                    android:background="#ff66aa5b"
+                    android:background="?attr/colorSurfaceContainerHigh"
                     android:orientation="vertical"
                     android:visibility="visible">
 
@@ -73,7 +80,6 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_margin="16dp"
-                        android:background="@drawable/circle_bg_white"
                         android:gravity="center">
 
                         <ImageView
@@ -86,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
-                        android:background="@color/lighter_grey" />
+                        android:background="?attr/colorOutlineVariant" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -119,13 +125,24 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@id/feature_types"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/activity_preview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/activity_preview"
             app:layout_constraintTop_toTopOf="@+id/activity_preview"
             tools:listitem="@layout/manage_screen_activity_add_feature_item" />
+
+        <TextView
+            android:id="@id/tv_warning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            tools:text="Warning: this is a useful information for the user"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            app:layout_constraintTop_toBottomOf="@id/feature_types"
+            app:layout_constraintEnd_toEndOf="@id/feature_types"
+            app:layout_constraintStart_toStartOf="@id/feature_types" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -152,86 +169,123 @@
         android:animateLayoutChanges="true"
         android:paddingBottom="16dp">
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_marginVertical="8dp"
-            android:layout_marginHorizontal="4dp"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@id/tv_warning"
+        <HorizontalScrollView
+            android:id="@+id/type_group_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="Warning: this is a useful information for the user"
-            android:layout_margin="8dp"
-            android:textColor="@color/grey"
-            android:textSize="12sp" />
+            android:layout_marginBottom="8dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scrollbars="none">
 
-        <LinearLayout
-            android:id="@id/add_view_type_selector_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/type_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Type"
-                android:textColor="?colorPrimary"
-                android:textSize="14sp" />
+                app:checkedButton="@id/type_activity"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-            <com.besome.sketch.lib.ui.SelectableButtonBar
-                android:id="@id/add_view_type_selector"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/type_activity"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Activity" />
 
-        <LinearLayout
+                <Button
+                    android:id="@+id/type_fragment"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fragment" />
+
+                <Button
+                    android:id="@+id/type_dialog_fragment"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DialogFragment" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/orientation_group_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scrollbars="none">
 
-            <TextView
-                android:id="@id/tv_screen_orientation"
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/orientation_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@color/color_primary"
-                android:textSize="14sp" />
+                app:checkedButton="@id/orientation_portrait"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-            <com.besome.sketch.lib.ui.SelectableButtonBar
-                android:id="@id/btnbar_orientation"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/orientation_portrait"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Portrait" />
 
-        <LinearLayout
+                <Button
+                    android:id="@+id/orientation_landscape"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Landscape" />
+
+                <Button
+                    android:id="@+id/orientation_both"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Both" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/keyboard_group_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_marginTop="8dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scrollbars="none">
 
-            <TextView
-                android:id="@id/tv_keyboard"
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/keyboard_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@color/color_primary"
-                android:textSize="14sp" />
+                app:checkedButton="@id/keyboard_unspecified"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-            <com.besome.sketch.lib.ui.SelectableButtonBar
-                android:id="@id/btnbar_keyboard"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/keyboard_unspecified"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unspecified" />
+
+                <Button
+                    android:id="@+id/keyboard_visible"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Visible" />
+
+                <Button
+                    android:id="@+id/keyboard_hidden"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hidden" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </HorizontalScrollView>
     </LinearLayout>
 </LinearLayout>
