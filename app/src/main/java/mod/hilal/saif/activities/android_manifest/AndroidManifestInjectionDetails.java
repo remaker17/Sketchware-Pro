@@ -12,6 +12,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.android_manifest.ActComponentsDialog;
 import mod.remaker.view.CustomAttributeView;
+import mod.remaker.util.ThemeUtils;
 
 public class AndroidManifestInjectionDetails extends Activity {
 
@@ -283,16 +285,17 @@ public class AndroidManifestInjectionDetails extends Activity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             CustomAttributeView attributeView = new CustomAttributeView(parent.getContext());
 
-            try {
-                SpannableString spannableString = new SpannableString((String) _data.get(position).get("value"));
-                spannableString.setSpan(new ForegroundColorSpan(0xff7a2e8c), 0, ((String) _data.get(position).get("value")).indexOf(":"), 33);
-                spannableString.setSpan(new ForegroundColorSpan(0xff212121), ((String) _data.get(position).get("value")).indexOf(":"), ((String) _data.get(position).get("value")).indexOf("=") + 1, 33);
-                spannableString.setSpan(new ForegroundColorSpan(0xff45a245), ((String) _data.get(position).get("value")).indexOf("\""), ((String) _data.get(position).get("value")).length(), 33);
-                attributeView.text.setText(spannableString);
-            } catch (Exception e) {
-                attributeView.text.setText((String) _data.get(position).get("value"));
-            }
+            int violet = ThemeUtils.getColor(attributeView, R.attr.colorViolet);
+            int onSurface = ThemeUtils.getColor(attributeView, R.attr.colorOnSurface);
+            int green = ThemeUtils.getColor(attributeView, R.attr.colorGreen);
 
+            String value = getItem(position).get("value").toString();
+            SpannableString spannableString = new SpannableString(value);
+            spannableString.setSpan(new ForegroundColorSpan(violet), 0, value.indexOf(":"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(onSurface), value.indexOf(":"), value.indexOf("=") + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(green), value.indexOf("\""), value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            attributeView.text.setText(spannableString);
             attributeView.icon.setVisibility(View.GONE);
             attributeView.setOnClickListener(v -> showDial(position));
             attributeView.setOnLongClickListener(v -> {
