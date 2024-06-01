@@ -35,6 +35,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <activity android:name="mod.remaker.settings.ExperimentalSettingsActivity" />
+
         <activity
             android:name="com.besome.sketch.common.SrcViewerActivity"
             android:configChanges="orientation|screenSize" />
