@@ -19,18 +19,17 @@ public class ExperimentalSettingsActivity extends AppCompatActivity {
         ThemeUtils.enableEdgeToEdgeProperly(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experimental_settings);
-        replaceFragment(new TopSettingsFragment());
+        switchFragment(new TopSettingsFragment(), false);
     }
 
-    public void replaceFragment(PreferenceFragment fragment) {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().addToBackStack(null);
-        Fragment lastFragment = null;
-        if (fragments != null && !fragments.isEmpty() && fragments.size() > 0) {
-            lastFragment = fragments.get(fragments.size() - 1);
+    public void switchFragment(PreferenceFragment fragment, boolean addToBackStack) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment activeFragment = getSupportFragmentManager().findFragmentById(R.id.settings_container);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
         }
-        if (lastFragment != null) {
-            transaction.hide(lastFragment);
+        if (activeFragment != null) {
+            transaction.hide(activeFragment);
         }
         transaction.add(R.id.settings_container, fragment);
         transaction.commit();

@@ -147,7 +147,7 @@
         <item name="fontFamily">@font/gilroy</item>
     </style>
 
-    <style name="MaterialToolbarTextExpandedAppearance" parent="TextAppearance.Material3.HeadlineMedium">
+    <style name="MaterialToolbarTextExpandedAppearance" parent="TextAppearance.Material3.HeadlineLarge">
         <item name="fontFamily">@font/gilroy</item>
         <item name="android:fontFamily">@font/gilroy</item>
     </style>

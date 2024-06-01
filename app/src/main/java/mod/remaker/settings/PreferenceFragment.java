@@ -1,5 +1,6 @@
 package mod.remaker.settings;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import com.sketchware.remod.R;
 import com.sketchware.remod.databinding.PreferenceFragmentBinding;
 
 public abstract class PreferenceFragment extends Fragment {
-    protected abstract String getTitle();
+    protected abstract String getTitle(Context context);
     protected abstract PreferenceContentFragment createContentFragment();
 
     @Override
@@ -33,7 +34,7 @@ public abstract class PreferenceFragment extends Fragment {
         PreferenceContentFragment content = createContentFragment();
 
         binding.toolbar.setNavigationOnClickListener(this::onNavigationClick);
-        binding.toolbar.setTitle(getTitle());
+        binding.toolbar.setTitle(getTitle(requireContext()));
 
         if (content != null) {
             getChildFragmentManager().beginTransaction()
@@ -47,6 +48,12 @@ public abstract class PreferenceFragment extends Fragment {
 
     protected void onNavigationClick(View v) {
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        activity.getSupportFragmentManager().popBackStack();
+        int backStackEntryCount = activity.getSupportFragmentManager().getBackStackEntryCount();
+
+        if (backStackEntryCount > 0) {
+            activity.getSupportFragmentManager().popBackStack();
+        } else {
+            activity.finish();
+        }
     }
 }

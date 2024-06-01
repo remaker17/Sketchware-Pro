@@ -37,15 +37,4 @@ public class ThemeUtils {
                 SystemBarStyle.light(TRANSPARENT, DEFAULT_DARK_SCRIM));
         }
     }
-
-    public static void updateEdgeToEdgePadding(View view) {
-        if (view.getFitsSystemWindows()) {
-            throw new IllegalStateException("View must have \'fitsSystemWindows\' disabled.");
-        }
-
-        int paddingLeft = view.getPaddingLeft();
-        int paddingTop = view.getPaddingTop();
-        int paddingRight = view.getPaddingRight();
-        int paddingBottom = view.getPaddingBottom();
-    }
 }

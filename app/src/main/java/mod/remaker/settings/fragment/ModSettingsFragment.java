@@ -6,14 +6,14 @@ import android.os.Bundle;
 import mod.remaker.settings.PreferenceContentFragment;
 import mod.remaker.settings.PreferenceFragment;
 
-public class TopSettingsFragment extends PreferenceFragment {
+public class ModSettingsFragment extends PreferenceFragment {
     @Override
     public String getTitle(Context context) {
-        return "Sketchware Settings";
+        return "Mod Settings";
     }
 
     @Override
     public PreferenceContentFragment createContentFragment() {
-        return new TopSettingsFragmentContent();
+        return new ModSettingsFragmentContent();
     }
 }
