@@ -1,5 +1,7 @@
 package mod.hasrat.menu;
 
+import static mod.remaker.util.SettingsConstants.USE_ASD_HIGHLIGHTER;
+
 import static android.text.TextUtils.isEmpty;
 import static mod.SketchwareUtil.getDip;
 
@@ -762,7 +764,7 @@ public class ExtraMenuBean {
         EditText edittext = root.findViewById(R.id.ed_input);
         edittext.setImeOptions(EditorInfo.IME_ACTION_NONE);
 
-        if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_USE_ASD_HIGHLIGHTER)) {
+        if (ConfigActivity.isSettingEnabled(USE_ASD_HIGHLIGHTER)) {
             new SimpleHighlighter(edittext);
         }
         edittext.setText(ss.getArgValue().toString());

@@ -26,6 +26,7 @@ import mod.hey.studios.editor.view.IdGenerator;
 import mod.hey.studios.moreblock.ReturnMoreblockManager;
 import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.hilal.saif.blocks.BlocksHandler;
+import mod.remaker.util.SettingsConstants;
 
 public class ExtraPaletteBlock {
 
@@ -56,7 +57,7 @@ public class ExtraPaletteBlock {
     }
 
     private boolean isWidgetUsed(String str) {
-        if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_EVERY_SINGLE_BLOCK)) {
+        if (ConfigActivity.isSettingEnabled(SettingsConstants.SHOW_EVERY_SINGLE_BLOCK)) {
             return true;
         }
 
@@ -1152,12 +1153,12 @@ public class ExtraPaletteBlock {
             case 8:
                 logicEditor.b("Create", "blockAdd");
                 logicEditor.b("Import From Collection", "blockImport");
-                if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_BUILT_IN_BLOCKS)) {
+                if (ConfigActivity.isSettingEnabled(SettingsConstants.SHOW_BUILT_IN_BLOCKS)) {
                     logicEditor.a(" ", "customToast");
                     logicEditor.a(" ", "customToastWithIcon");
                 }
                 moreBlocks();
-                if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_BUILT_IN_BLOCKS)) {
+                if (ConfigActivity.isSettingEnabled(SettingsConstants.SHOW_BUILT_IN_BLOCKS)) {
                     logicEditor.a("Command Blocks", 0xff555555);
                     logicEditor.a("c", "CommandBlockJava");
                     logicEditor.a("c", "CommandBlockXML");

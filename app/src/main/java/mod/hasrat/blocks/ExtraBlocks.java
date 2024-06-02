@@ -1,5 +1,7 @@
 package mod.hasrat.blocks;
 
+import static mod.remaker.util.SettingsConstants.SHOW_EVERY_SINGLE_BLOCK;
+
 import android.util.Pair;
 
 import com.besome.sketch.editor.LogicEditorActivity;
@@ -11,6 +13,7 @@ import java.util.regex.Pattern;
 
 import a.a.a.eC;
 import a.a.a.jC;
+
 import mod.hilal.saif.activities.tools.ConfigActivity;
 
 public class ExtraBlocks {
@@ -127,11 +130,11 @@ public class ExtraBlocks {
     }
 
     public boolean isComponentUsed(int componentId) {
-        return projectDataManager.f(javaName, componentId) || ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_EVERY_SINGLE_BLOCK);
+        return projectDataManager.f(javaName, componentId) || ConfigActivity.isSettingEnabled(SHOW_EVERY_SINGLE_BLOCK);
     }
 
     public boolean isCustomVarUsed(String variable) {
-        if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_EVERY_SINGLE_BLOCK)) {
+        if (ConfigActivity.isSettingEnabled(SHOW_EVERY_SINGLE_BLOCK)) {
             return true;
         }
 

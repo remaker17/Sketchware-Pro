@@ -16,7 +16,6 @@ import com.google.android.material.color.MaterialColors;
 
 public class ThemeUtils {
     public static final int DEFAULT_DARK_SCRIM = EdgeToEdge.getDefaultDarkScrim();
-
     public static final SystemBarStyle DEFAULT_STATUS_BAR_STYLE = SystemBarStyle.auto(
         TRANSPARENT, TRANSPARENT);
 
@@ -27,6 +26,11 @@ public class ThemeUtils {
         return MaterialColors.getColor(view, resourceId);
     }
 
+    /**
+     * A method without enforcing contrast, magic based on `EdgeToEdge.kt`
+     *
+     * @param activity The activity to which edge-to-edge will be enabled.
+     */
     public static void enableEdgeToEdgeProperly(ComponentActivity activity) {
         if ((activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) ==
                 Configuration.UI_MODE_NIGHT_YES) {

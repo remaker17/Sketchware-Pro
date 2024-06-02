@@ -9,6 +9,8 @@ import dev.aldi.sayuti.block.ExtraBlockFile;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hasrat.blocks.ExtraBlocks;
 import mod.hilal.saif.activities.tools.ConfigActivity;
+import mod.remaker.util.SettingsConstants;
+import mod.remaker.util.SettingsUtils;
 
 public class BlocksHandler {
 
@@ -2417,13 +2419,13 @@ public class BlocksHandler {
     }
 
     private static boolean showAll() {
-        return ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_ALWAYS_SHOW_BLOCKS)
-                || ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_EVERY_SINGLE_BLOCK);
+        return ConfigActivity.isSettingEnabled(SettingsConstants.ALWAYS_SHOW_BLOCKS)
+                || ConfigActivity.isSettingEnabled(SettingsConstants.SHOW_EVERY_SINGLE_BLOCK);
     }
 
     private static boolean showBuiltIn() {
-        return ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_BUILT_IN_BLOCKS)
-                || ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_EVERY_SINGLE_BLOCK);
+        return ConfigActivity.isSettingEnabled(SettingsConstants.SHOW_BUILT_IN_BLOCKS)
+                || ConfigActivity.isSettingEnabled(SettingsConstants.SHOW_EVERY_SINGLE_BLOCK);
     }
 
     public static void primaryBlocksA(LogicEditorActivity logicEditorActivity, boolean isBoolUsed, boolean isIntUsed, boolean isStrUsed, boolean isMapUsed) {

@@ -1,5 +1,7 @@
 package com.besome.sketch;
 
+import static mod.remaker.util.SettingsConstants.SKIP_MAJOR_CHANGES_REMINDER;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -53,6 +55,7 @@ import mod.ilyasse.activities.about.AboutModActivity;
 import mod.jbk.util.LogUtil;
 import mod.tyron.backup.CallBackTask;
 import mod.tyron.backup.SingleCopyAsyncTask;
+import mod.remaker.util.SettingsUtils;
 
 public class MainActivity extends BasePermissionAppCompatActivity {
     private final OnBackPressedCallback closeDrawer = new OnBackPressedCallback(true) {
@@ -236,7 +239,7 @@ public class MainActivity extends BasePermissionAppCompatActivity {
                     }
                 }).execute(data);
             }
-        } else if (hasStorageAccess && !ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SKIP_MAJOR_CHANGES_REMINDER)) {
+        } else if (hasStorageAccess && !ConfigActivity.isSettingEnabled(SKIP_MAJOR_CHANGES_REMINDER)) {
             aB dialog = new aB(this);
             dialog.b("New changes in v6.4.0");
             dialog.a("Just as a reminder; There have been many changes since v6.3.0 fix1, " +
@@ -251,7 +254,7 @@ public class MainActivity extends BasePermissionAppCompatActivity {
             });
             dialog.a("Close", Helper.getDialogDismissListener(dialog));
             dialog.configureDefaultButton("Never show again", v -> {
-                ConfigActivity.setSetting(ConfigActivity.SETTING_SKIP_MAJOR_CHANGES_REMINDER, true);
+                ConfigActivity.changeSetting(SKIP_MAJOR_CHANGES_REMINDER, true);
                 dialog.dismiss();
             });
             dialog.show();

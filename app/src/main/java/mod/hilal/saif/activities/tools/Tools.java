@@ -172,12 +172,6 @@ public class Tools extends Activity {
                 new Intent(getApplicationContext(), ManageLocalLibraryActivity.class),
                 new Pair<>("sc_id", "system")));
 
-        LibraryItemView modSettings = new LibraryItemView(this);
-        makeup(modSettings, R.drawable.engineering_48, "Mod settings", "Change general mod settings");
-        base.addView(modSettings);
-        modSettings.setOnClickListener(new ActivityLauncher(
-                new Intent(getApplicationContext(), ConfigActivity.class)));
-
         LibraryItemView openWorkingDirectory = new LibraryItemView(this);
         makeup(openWorkingDirectory, R.mipmap.ic_type_folder, "Open working directory", "Open Sketchware Pro's directory and edit files in it");
         base.addView(openWorkingDirectory);

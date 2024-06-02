@@ -48,6 +48,8 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.editor.manage.block.v2.BlockLoader;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.lib.PCP;
+import mod.remaker.util.SettingsConstants;
+import mod.remaker.util.SettingsUtils;
 
 public class BlocksManager extends AppCompatActivity {
 
@@ -129,9 +131,9 @@ public class BlocksManager extends AppCompatActivity {
 
             dialog.a(customView);
             dialog.b(Helper.getResString(R.string.common_word_save), view -> {
-                ConfigActivity.setSetting(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
+                ConfigActivity.changeSetting(SettingsConstants.BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
                         palettesPath.getText().toString());
-                ConfigActivity.setSetting(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
+                ConfigActivity.changeSetting(SettingsConstants.BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
                         blocksPath.getText().toString());
 
                 _readSettings();
@@ -140,10 +142,10 @@ public class BlocksManager extends AppCompatActivity {
             });
             dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
             dialog.configureDefaultButton("Defaults", view -> {
-                ConfigActivity.setSetting(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
-                        ConfigActivity.getDefaultValue(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH));
-                ConfigActivity.setSetting(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
-                        ConfigActivity.getDefaultValue(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH));
+                ConfigActivity.changeSetting(SettingsConstants.BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
+                        SettingsUtils.getDefaultValue(SettingsConstants.BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH));
+                ConfigActivity.changeSetting(SettingsConstants.BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
+                        SettingsUtils.getDefaultValue(SettingsConstants.BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH));
 
                 _readSettings();
                 _refresh_list();
@@ -182,10 +184,10 @@ public class BlocksManager extends AppCompatActivity {
     }
 
     private void _readSettings() {
-        pallet_dir = FileUtil.getExternalStorageDir() + ConfigActivity.getStringSettingValueOrSetAndGet(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
-                (String) ConfigActivity.getDefaultValue(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH));
-        blocks_dir = FileUtil.getExternalStorageDir() + ConfigActivity.getStringSettingValueOrSetAndGet(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
-                (String) ConfigActivity.getDefaultValue(ConfigActivity.SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH));
+        pallet_dir = FileUtil.getExternalStorageDir() + ConfigActivity.getStringSettingValueOrSetAndGet(SettingsConstants.BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
+                (String) SettingsUtils.getDefaultValue(SettingsConstants.BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH));
+        blocks_dir = FileUtil.getExternalStorageDir() + ConfigActivity.getStringSettingValueOrSetAndGet(SettingsConstants.BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
+                (String) SettingsUtils.getDefaultValue(SettingsConstants.BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH));
 
         if (FileUtil.isExistFile(blocks_dir)) {
             try {

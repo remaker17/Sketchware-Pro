@@ -33,6 +33,7 @@ public abstract class PreferenceFragment extends Fragment {
         PreferenceFragmentBinding binding = PreferenceFragmentBinding.inflate(inflater, container, false);
         PreferenceContentFragment content = createContentFragment();
 
+        binding.appBarLayout.setLiftOnScrollTargetViewId(androidx.preference.R.id.recycler_view);
         binding.toolbar.setNavigationOnClickListener(this::onNavigationClick);
         binding.toolbar.setTitle(getTitle(requireContext()));
 
@@ -47,13 +48,11 @@ public abstract class PreferenceFragment extends Fragment {
     }
 
     protected void onNavigationClick(View v) {
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        int backStackEntryCount = activity.getSupportFragmentManager().getBackStackEntryCount();
-
+        int backStackEntryCount = getParentFragmentManager().getBackStackEntryCount();
         if (backStackEntryCount > 0) {
-            activity.getSupportFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
         } else {
-            activity.finish();
+            getActivity().finish();
         }
     }
 }

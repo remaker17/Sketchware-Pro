@@ -1,5 +1,7 @@
 package com.besome.sketch.projects;
 
+import static mod.remaker.util.SettingsConstants.USE_NEW_VERSION_CONTROL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -253,7 +255,7 @@ public class MyProjectSettingActivity extends BaseAppCompatActivity implements V
                 binding.imgColorGuide.setVisibility(View.VISIBLE);
             }
         } else if (id == R.id.ver_code_holder || id == R.id.ver_name_holder) {
-            if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_USE_NEW_VERSION_CONTROL)) {
+            if (ConfigActivity.isSettingEnabled(USE_NEW_VERSION_CONTROL)) {
                 new VersionDialog(this).show();
             } else {
                 showOldVersionControlDialog();
