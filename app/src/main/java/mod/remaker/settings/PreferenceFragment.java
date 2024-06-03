@@ -31,16 +31,16 @@ public abstract class PreferenceFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         PreferenceFragmentBinding binding = PreferenceFragmentBinding.inflate(inflater, container, false);
-        PreferenceContentFragment content = createContentFragment();
+        PreferenceContentFragment contentFragment = createContentFragment();
 
         binding.appBarLayout.setLiftOnScrollTargetViewId(androidx.preference.R.id.recycler_view);
         binding.toolbar.setNavigationOnClickListener(this::onNavigationClick);
         binding.toolbar.setTitle(getTitle(requireContext()));
 
-        if (content != null) {
+        if (contentFragment != null) {
             getChildFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .add(R.id.preference_content_container, content)
+                .add(R.id.preference_content_container, contentFragment)
                 .commit();
         }
 

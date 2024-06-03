@@ -4,6 +4,7 @@ import static mod.remaker.util.SettingsConstants.SETTINGS_FILE;
 import static mod.remaker.util.SettingsConstants.BACKUP_DIRECTORY;
 import static mod.remaker.util.SettingsConstants.BACKUP_FILENAME;
 import static mod.remaker.util.SettingsConstants.ROOT_AUTO_INSTALL_PROJECTS;
+import static mod.remaker.util.SettingsConstants.ROOT_AUTO_OPEN_AFTER_INSTALLING;
 import static mod.remaker.util.SettingsUtils.getDefaultValue;
 
 import android.content.Context;
@@ -28,6 +29,8 @@ import mod.remaker.settings.PreferenceFragment;
 import mod.remaker.settings.preference.M3EditTextPreference;
 
 public class ModSettingsFragment extends PreferenceFragment {
+    private static final String RESET_BACKUP_FILENAME_FORMAT = "reset-backup-filename";
+
     @Override
     public String getTitle(Context context) {
         return "Mod Settings";
@@ -48,6 +51,11 @@ public class ModSettingsFragment extends PreferenceFragment {
         public boolean onPreferenceTreeClick(Preference preference) {
             if (preference instanceof SwitchPreferenceCompat switchPreference) {
                 ConfigActivity.changeSetting(preference.getKey(), switchPreference.isChecked());
+            }
+
+            if (preference.getKey().equals(RESET_BACKUP_FILENAME_FORMAT)) {
+                ConfigActivity.removeSetting(BACKUP_FILENAME);
+                SketchwareUtil.toast("Reset to default value complete.");
             }
 
             return false;
@@ -79,8 +87,12 @@ public class ModSettingsFragment extends PreferenceFragment {
                 }
             }
 
-            if (preference.getKey().equals(ROOT_AUTO_INSTALL_PROJECTS) && preference instanceof SwitchPreferenceCompat) {
-                preference.setOnPreferenceChangeListener((pref, value) -> onAutoInstallProjectsChange(value));
+            if (preference.getKey().equals(ROOT_AUTO_INSTALL_PROJECTS) || preference.getKey().equals(ROOT_AUTO_OPEN_AFTER_INSTALLING)) {
+                Shell shell = Shell.getShell();
+                if (!shell.isRoot()) {
+                    preference.setEnabled(false);
+                    preference.setSummary("Not available for non-rooted devices.");
+                }
             }
 
             if (preference.getKey().equals(BACKUP_DIRECTORY) && preference instanceof M3EditTextPreference editTextPreference) {
@@ -95,7 +107,7 @@ public class ModSettingsFragment extends PreferenceFragment {
 
             if (preference.getKey().equals(BACKUP_FILENAME) && preference instanceof M3EditTextPreference editTextPreference) {
                 editTextPreference.setText(ConfigActivity.getBackupFileName());
-                editTextPreference.setHelperText("This defines how SWB backup files get named.\n" +
+                editTextPreference.setHelperText(
                     "Available variables:\n" +
                     " - $projectName - Project name\n" +
                     " - $versionCode - App version code\n" +
@@ -111,32 +123,6 @@ public class ModSettingsFragment extends PreferenceFragment {
                     return true;
                 });
             }
-        }
-
-        private boolean onAutoInstallProjectsChange(Object value) {
-            try {
-                return onAutoInstallProjectsChangeInternal(value).get();
-            } catch (Exception e) {
-                return false;
-            }
-        }
-
-        private CompletableFuture<Boolean> onAutoInstallProjectsChangeInternal(Object value) {
-            CompletableFuture<Boolean> changeability = new CompletableFuture<>();
-
-            if ((Boolean) value) {
-                Shell.getShell(shell -> {
-                    if (!shell.isRoot()) {
-                        SketchwareUtil.toastError("Couldn't acquire root access");
-                    }
-
-                    changeability.complete(shell.isRoot());
-                });
-            } else {
-                changeability.complete(false);
-            }
-
-            return changeability;
         }
     }
 }

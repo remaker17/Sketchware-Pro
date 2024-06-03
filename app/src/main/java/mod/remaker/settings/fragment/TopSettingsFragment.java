@@ -50,9 +50,8 @@ public class TopSettingsFragment extends PreferenceFragment {
             if (fragment != null && requireActivity() instanceof ExperimentalSettingsActivity activity) {
                 activity.switchFragment(fragment, /* addToBackStack= */ true);
                 return true;
-            } else {
-                return false;
             }
+            return false;
         }
     }
 }

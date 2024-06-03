@@ -77,7 +77,7 @@ public class M3EditTextPreferenceFragment extends PreferenceDialogFragmentCompat
 
         M3EditTextPreference preference = getEditTextPreference();
         mInputLayout.getEditText().setText(mText);
-        mInputLayout.setHint(preference.getHintText());
+        mInputLayout.setHint(preference.getHint());
         mInputLayout.setHelperText(preference.getHelperText());
     }
 

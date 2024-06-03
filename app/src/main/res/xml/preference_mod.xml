@@ -24,7 +24,7 @@
         android:key="backup-dir"
         android:summary="The default directory is /Internal storage/.sketchware/backups/."
         android:title="Backup directory"
-        app:hintText="Backup directory" />
+        app:hint="Backup directory" />
 
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -58,8 +58,13 @@
 
     <mod.remaker.settings.preference.M3EditTextPreference
         android:key="backup-filename"
-        android:summary="Default is &quot;$projectName v$versionName ($pkgName, $versionCode) $time(yyyy-MM-dd'T'HHmmss)&quot;"
+        android:summary="Defines how SWB backup files get named."
         android:title="Backup filename format"
-        app:hintText="Format" />
+        app:hint="Format" />
+
+    <Preference
+        android:key="reset-backup-filename"
+        android:summary="Sets default value for backup filename format"
+        android:title="Reset backup filename format" />
 
 </PreferenceScreen>

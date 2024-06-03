@@ -17,7 +17,7 @@ import com.sketchware.remod.R;
 
 public class M3EditTextPreference extends EditTextPreference {
     private String mHelperText;
-    private String mHintText;
+    private String mHint;
 
     public M3EditTextPreference(@NonNull Context context) {
         this(context, null);
@@ -42,9 +42,9 @@ public class M3EditTextPreference extends EditTextPreference {
             setHelperText(helperText);
         }
 
-        String hintText = a.getString(R.styleable.M3EditTextPreference_hintText);
-        if (!TextUtils.isEmpty(hintText)) {
-            setHintText(hintText);
+        String hint = a.getString(R.styleable.M3EditTextPreference_hint);
+        if (!TextUtils.isEmpty(hint)) {
+            setHint(hint);
         }
 
         a.recycle();
@@ -65,17 +65,17 @@ public class M3EditTextPreference extends EditTextPreference {
     }
 
     /**
-     * Sets the hint text to the preference.
+     * Sets the hint to the preference.
      *
-     * @param hintText The hint text to store
+     * @param hint The hint text to store
      */
-    public void setHintText(@Nullable String hintText) {
-        mHintText = hintText;
+    public void setHint(@Nullable String hint) {
+        mHint = hint;
     }
 
     @Nullable
-    public String getHintText() {
-        return mHintText;
+    public String getHint() {
+        return mHint;
     }
 
     @Nullable
@@ -84,7 +84,7 @@ public class M3EditTextPreference extends EditTextPreference {
         final Parcelable superState = super.onSaveInstanceState();
         final SavedState myState = new SavedState(superState);
         myState.mHelperText = getHelperText();
-        myState.mHintText = getHintText();
+        myState.mHint = getHint();
         return myState;
     }
 
@@ -99,7 +99,7 @@ public class M3EditTextPreference extends EditTextPreference {
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
         setHelperText(myState.mHelperText);
-        setHintText(myState.mHintText);
+        setHint(myState.mHint);
     }
 
     private static class SavedState extends BaseSavedState {
@@ -117,12 +117,12 @@ public class M3EditTextPreference extends EditTextPreference {
                 };
 
         String mHelperText;
-        String mHintText;
+        String mHint;
 
         SavedState(Parcel source) {
             super(source);
             mHelperText = source.readString();
-            mHintText = source.readString();
+            mHint = source.readString();
         }
 
         SavedState(Parcelable superState) {
@@ -133,7 +133,7 @@ public class M3EditTextPreference extends EditTextPreference {
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeString(mHelperText);
-            dest.writeString(mHintText);
+            dest.writeString(mHint);
         }
     }
 }

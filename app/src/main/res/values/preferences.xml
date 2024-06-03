@@ -4,7 +4,7 @@
 
     <declare-styleable name="M3EditTextPreference">
         <attr name="helperText" format="string" />
-        <attr name="hintText" format="string" />
+        <attr name="hint" format="string" />
     </declare-styleable>
 
     <style name="Preference.AppTheme" parent="Preference.Material">
