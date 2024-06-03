@@ -177,6 +177,12 @@ public class Tools extends Activity {
         base.addView(openWorkingDirectory);
         openWorkingDirectory.setOnClickListener(v -> openWorkingDirectory());
 
+        LibraryItemView modSettings = new LibraryItemView(this);
+        makeup(modSettings, R.drawable.ic_developer_mode_24, "Mod settings", "Change general mod settings");
+        base.addView(modSettings);
+        modSettings.setOnClickListener(new ActivityLauncher(
+                new Intent(getApplicationContext(), ConfigActivity.class)));
+
         LibraryItemView signApkFile = new LibraryItemView(this);
         makeup(signApkFile, R.drawable.ic_apk_color_96dp, "Sign an APK file with testkey", "Sign an already existing APK file with testkey and signature schemes up to V4");
         base.addView(signApkFile);

@@ -1,4 +1,12 @@
 <resources>
+    <!-- Default style for M3EditTextPreference. -->
+    <attr name="m3EditTextPreferenceStyle" format="reference" />
+
+    <declare-styleable name="M3EditTextPreference">
+        <attr name="helperText" format="string" />
+        <attr name="hintText" format="string" />
+    </declare-styleable>
+
     <style name="Preference.AppTheme" parent="Preference.Material">
         <item name="android:layout">@layout/preference_layout</item>
         <item name="iconSpaceReserved">false</item>
@@ -25,7 +33,7 @@
 
     <style name="PreferenceThemeOverlay.AppTheme" parent="PreferenceThemeOverlay">
         <item name="android:scrollbars">none</item>
-        <item name="editTextPreferenceStyle">@style/Preference.AppTheme.DialogPreference.EditTextPreference</item>
+        <item name="m3EditTextPreferenceStyle">@style/Preference.AppTheme.DialogPreference.EditTextPreference</item>
         <item name="dialogPreferenceStyle">@style/Preference.AppTheme.DialogPreference</item>
         <item name="preferenceStyle">@style/Preference.AppTheme</item>
         <item name="switchPreferenceCompatStyle">@style/Preference.AppTheme.SwitchPreferenceCompat</item>

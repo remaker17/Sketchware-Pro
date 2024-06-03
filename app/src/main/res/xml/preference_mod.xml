@@ -20,10 +20,11 @@
         android:summary="Every single available block will be shown. Will slow down opening palettes!"
         android:title="Show all blocks of palettes" />
 
-    <EditTextPreference
+    <mod.remaker.settings.preference.M3EditTextPreference
         android:key="backup-dir"
         android:summary="The default directory is /Internal storage/.sketchware/backups/."
-        android:title="Backup directory" />
+        android:title="Backup directory"
+        app:hintText="Backup directory" />
 
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -55,9 +56,10 @@
         android:summary="Enables syntax highlighting while editing blocks' text parameters."
         android:title="Enable block text input highlighting" />
 
-    <EditTextPreference
+    <mod.remaker.settings.preference.M3EditTextPreference
         android:key="backup-filename"
         android:summary="Default is &quot;$projectName v$versionName ($pkgName, $versionCode) $time(yyyy-MM-dd'T'HHmmss)&quot;"
-        android:title="Backup filename format" />
+        android:title="Backup filename format"
+        app:hintText="Format" />
 
 </PreferenceScreen>

@@ -4,7 +4,8 @@
         <item name="collapsingToolbarLayoutStyle">?attr/collapsingToolbarLayoutLargeStyle</item>
         <item name="collapsingToolbarLayoutLargeStyle">@style/AppTheme.CollapsingToolbar</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.AppTheme</item>
-        <item name="textInputStyle">@style/TextInputLayoutStyle</item>
+        <item name="textInputStyle">@style/Widget.AppTheme.TextInputLayout</item>
+        <item name="textInputOutlinedStyle">@style/Widget.AppTheme.TextInputLayout</item>
 
         <item name="fontFamily">@font/gilroy</item>
         <item name="android:fontFamily">@font/gilroy</item>

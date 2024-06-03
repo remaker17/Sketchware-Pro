@@ -93,36 +93,23 @@
         <item name="android:minHeight">3dp</item>
     </style>
 
-    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:paddingHorizontal">0dp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:bottomLeftRadius">14dp</item>
-        <item name="android:bottomRightRadius">14dp</item>
-        <item name="android:topLeftRadius">14dp</item>
-        <item name="android:topRightRadius">14dp</item>
-        <item name="hintEnabled">true</item>
-        <item name="shapeAppearanceOverlay">
-            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
-        </item>
+    <style name="Widget.AppTheme.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox" />
+    <style name="Widget.AppTheme.TextInputEditText.Legacy" parent="Widget.Design.TextInputEditText" />
+
+    <style name="Widget.AppTheme.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearance">?attr/shapeAppearanceCornerSmall</item>
     </style>
 
-    <style name="InLayoutTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:paddingHorizontal">0dp</item>
-        <item name="boxStrokeColor">@color/input_layout_selector</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:bottomLeftRadius">14dp</item>
-        <item name="android:bottomRightRadius">14dp</item>
-        <item name="android:topLeftRadius">14dp</item>
-        <item name="android:topRightRadius">14dp</item>
-        <item name="hintEnabled">true</item>
-        <item name="shapeAppearanceOverlay">
-            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
-        </item>
+    <style name="Widget.AppTheme.TextInputLayout.Legacy">
+        <item name="boxBackgroundMode">none</item>
+        <item name="enforceMaterialTheme">false</item>
+        <item name="enforceTextAppearance">false</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputEditText.Legacy</item>
+        <item name="shapeAppearance">@null</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/inputfields_corners_radius</item>
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Legacy" parent="ThemeOverlay.Design.TextInputEditText">
+        <item name="editTextStyle">@style/Widget.AppTheme.TextInputEditText.Legacy</item>
     </style>
 
     <style name="roundedImageViewRounded">

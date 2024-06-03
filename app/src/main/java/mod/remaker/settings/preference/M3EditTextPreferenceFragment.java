@@ -16,15 +16,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.sketchware.remod.R;
 
 public class M3EditTextPreferenceFragment extends PreferenceDialogFragmentCompat {
-    private static final int SHOW_REQUEST_TIMEOUT = 1000;
     private static final String SAVE_STATE_TEXT = "M3EditTextPreferenceFragment.text";
-    private static final String SAVE_STATE_MESSAGE_TEXT = "M3EditTextPreferenceFragment.messageText";
 
     private TextInputLayout mInputLayout;
     private CharSequence mText;
-    private CharSequence mMessageText;
-
-    private int mWhichButtonClicked = 0;
 
     @NonNull
     public static M3EditTextPreferenceFragment newInstance(@NonNull String key) {
@@ -40,10 +35,8 @@ public class M3EditTextPreferenceFragment extends PreferenceDialogFragmentCompat
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
             mText = getEditTextPreference().getText();
-            mMessageText = getEditTextPreference().getDialogMessage();
         } else {
             mText = savedInstanceState.getCharSequence(SAVE_STATE_TEXT);
-            mMessageText = savedInstanceState.getCharSequence(SAVE_STATE_MESSAGE_TEXT);
         }
     }
 
@@ -51,13 +44,10 @@ public class M3EditTextPreferenceFragment extends PreferenceDialogFragmentCompat
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putCharSequence(SAVE_STATE_TEXT, mText);
-        outState.putCharSequence(SAVE_STATE_MESSAGE_TEXT, mMessageText);
     }
 
     @Override
     public @NonNull Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        mWhichButtonClicked = DialogInterface.BUTTON_NEGATIVE;
-
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getPreference().getDialogTitle())
                 .setPositiveButton(getPreference().getPositiveButtonText(), this)
@@ -85,24 +75,21 @@ public class M3EditTextPreferenceFragment extends PreferenceDialogFragmentCompat
                     " @id/input_layout");
         }
 
+        M3EditTextPreference preference = getEditTextPreference();
         mInputLayout.getEditText().setText(mText);
-        mInputLayout.setHelperText(mMessageText);
+        mInputLayout.setHint(preference.getHintText());
+        mInputLayout.setHelperText(preference.getHelperText());
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        mWhichButtonClicked = which;
-    }
-
-    private EditTextPreference getEditTextPreference() {
-        return (EditTextPreference) getPreference();
+    private M3EditTextPreference getEditTextPreference() {
+        return (M3EditTextPreference) getPreference();
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             String value = mInputLayout.getEditText().getText().toString();
-            final EditTextPreference preference = getEditTextPreference();
+            final M3EditTextPreference preference = getEditTextPreference();
             if (preference.callChangeListener(value)) {
                 preference.setText(value);
             }

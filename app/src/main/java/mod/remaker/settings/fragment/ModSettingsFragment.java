@@ -1,28 +1,31 @@
 package mod.remaker.settings.fragment;
 
 import static mod.remaker.util.SettingsConstants.SETTINGS_FILE;
+import static mod.remaker.util.SettingsConstants.BACKUP_DIRECTORY;
 import static mod.remaker.util.SettingsConstants.BACKUP_FILENAME;
+import static mod.remaker.util.SettingsConstants.ROOT_AUTO_INSTALL_PROJECTS;
+import static mod.remaker.util.SettingsUtils.getDefaultValue;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.sketchware.remod.R;
+import com.topjohnwu.superuser.Shell;
 
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.remaker.settings.PreferenceContentFragment;
 import mod.remaker.settings.PreferenceFragment;
-import mod.remaker.util.SettingsConstants;
-import mod.remaker.util.SettingsUtils;
+import mod.remaker.settings.preference.M3EditTextPreference;
 
 public class ModSettingsFragment extends PreferenceFragment {
     @Override
@@ -46,6 +49,7 @@ public class ModSettingsFragment extends PreferenceFragment {
             if (preference instanceof SwitchPreferenceCompat switchPreference) {
                 ConfigActivity.changeSetting(preference.getKey(), switchPreference.isChecked());
             }
+
             return false;
         }
 
@@ -69,14 +73,29 @@ public class ModSettingsFragment extends PreferenceFragment {
                         }
                     }
                 } else {
-                    boolean defaultValue = (boolean) SettingsUtils.getDefaultValue(keyName);
+                    boolean defaultValue = Boolean.parseBoolean((String) getDefaultValue(keyName));
                     ConfigActivity.changeSetting(keyName, defaultValue);
                     switchPreference.setChecked(defaultValue);
                 }
             }
 
-            if (preference.getKey().equals(BACKUP_FILENAME) && preference instanceof EditTextPreference editTextPreference) {
-                editTextPreference.setDialogMessage("This defines how SWB backup files get named.\n" +
+            if (preference.getKey().equals(ROOT_AUTO_INSTALL_PROJECTS) && preference instanceof SwitchPreferenceCompat) {
+                preference.setOnPreferenceChangeListener((pref, value) -> onAutoInstallProjectsChange(value));
+            }
+
+            if (preference.getKey().equals(BACKUP_DIRECTORY) && preference instanceof M3EditTextPreference editTextPreference) {
+                editTextPreference.setText(ConfigActivity.getBackupPath());
+                editTextPreference.setHelperText("Directory inside /Internal storage/, e.g. sketchware/backups");
+                editTextPreference.setOnPreferenceChangeListener((pref, value) -> {
+                    ConfigActivity.changeSetting(BACKUP_DIRECTORY, value);
+                    SketchwareUtil.toast("Saved");
+                    return true;
+                });
+            }
+
+            if (preference.getKey().equals(BACKUP_FILENAME) && preference instanceof M3EditTextPreference editTextPreference) {
+                editTextPreference.setText(ConfigActivity.getBackupFileName());
+                editTextPreference.setHelperText("This defines how SWB backup files get named.\n" +
                     "Available variables:\n" +
                     " - $projectName - Project name\n" +
                     " - $versionCode - App version code\n" +
@@ -86,7 +105,38 @@ public class ModSettingsFragment extends PreferenceFragment {
                     "\n" +
                     "Additionally, you can format your own time like this using Java's date formatter syntax:\n" +
                     "$time(yyyy-MM-dd'T'HHmmss)\n");
+                editTextPreference.setOnPreferenceChangeListener((pref, value) -> {
+                    ConfigActivity.changeSetting(BACKUP_FILENAME, value);
+                    SketchwareUtil.toast("Saved");
+                    return true;
+                });
             }
+        }
+
+        private boolean onAutoInstallProjectsChange(Object value) {
+            try {
+                return onAutoInstallProjectsChangeInternal(value).get();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        private CompletableFuture<Boolean> onAutoInstallProjectsChangeInternal(Object value) {
+            CompletableFuture<Boolean> changeability = new CompletableFuture<>();
+
+            if ((Boolean) value) {
+                Shell.getShell(shell -> {
+                    if (!shell.isRoot()) {
+                        SketchwareUtil.toastError("Couldn't acquire root access");
+                    }
+
+                    changeability.complete(shell.isRoot());
+                });
+            } else {
+                changeability.complete(false);
+            }
+
+            return changeability;
         }
     }
 }
