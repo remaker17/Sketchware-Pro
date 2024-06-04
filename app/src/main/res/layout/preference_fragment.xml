@@ -18,7 +18,8 @@
             app:collapsedTitleTextColor="?attr/colorOnSurface"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:expandedTitleMarginStart="24dp"
-            app:expandedTitleTextColor="?attr/colorOnSurface">
+            app:expandedTitleTextColor="?attr/colorOnSurface"
+            app:liftOnScrollTargetViewId="@id/recycler_view">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -31,7 +32,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/preference_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

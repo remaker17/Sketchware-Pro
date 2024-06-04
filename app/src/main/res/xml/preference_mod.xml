@@ -24,7 +24,7 @@
         android:key="backup-dir"
         android:summary="The default directory is /Internal storage/.sketchware/backups/."
         android:title="Backup directory"
-        app:hint="Backup directory" />
+        app:hint="Directory path" />
 
     <SwitchPreferenceCompat
         android:defaultValue="false"

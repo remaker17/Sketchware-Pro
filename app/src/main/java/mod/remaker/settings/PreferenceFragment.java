@@ -12,12 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.transition.MaterialSharedAxis;
-import com.sketchware.remod.R;
 import com.sketchware.remod.databinding.PreferenceFragmentBinding;
 
 public abstract class PreferenceFragment extends Fragment {
     protected abstract String getTitle(Context context);
-    protected abstract PreferenceContentFragment createContentFragment();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,17 +29,23 @@ public abstract class PreferenceFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         PreferenceFragmentBinding binding = PreferenceFragmentBinding.inflate(inflater, container, false);
-        PreferenceContentFragment contentFragment = createContentFragment();
+        Fragment contentFragment = getContentFragment();
+        View contentView = onCreateContentView(inflater, container);
 
-        binding.appBarLayout.setLiftOnScrollTargetViewId(androidx.preference.R.id.recycler_view);
         binding.toolbar.setNavigationOnClickListener(this::onNavigationClick);
         binding.toolbar.setTitle(getTitle(requireContext()));
 
         if (contentFragment != null) {
             getChildFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .add(R.id.preference_content_container, contentFragment)
+                .add(binding.preferenceContentContainer.getId(), contentFragment)
                 .commit();
+        } else if (contentView != null) {
+            if (contentView.getParent() != null) {
+                ViewGroup parent = (ViewGroup) contentView.getParent();
+                parent.removeView(contentView);
+            }
+            binding.preferenceContentContainer.addView(contentView);
         }
 
         return binding.getRoot();
@@ -54,5 +58,13 @@ public abstract class PreferenceFragment extends Fragment {
         } else {
             getActivity().finish();
         }
+    }
+
+    protected Fragment getContentFragment() {
+        return null;
+    }
+
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container) {
+        return null;
     }
 }

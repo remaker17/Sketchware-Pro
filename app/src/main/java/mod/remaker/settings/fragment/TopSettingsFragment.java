@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 
 import com.sketchware.remod.R;
@@ -20,7 +21,7 @@ public class TopSettingsFragment extends PreferenceFragment {
     }
 
     @Override
-    public PreferenceContentFragment createContentFragment() {
+    public Fragment getContentFragment() {
         return new TopSettingsFragmentContent();
     }
 
