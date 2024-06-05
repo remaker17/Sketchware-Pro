@@ -1,27 +1,16 @@
 package mod.remaker.util;
 
-import static mod.remaker.util.SettingsConstants.SETTINGS_FILE;
+import static mod.remaker.util.SettingsContracts.RequestStorageManagerPermission;
 
-import android.widget.Toast;
+import android.os.Build;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
-
-import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-import mod.SketchwareUtil;
-import mod.agus.jcoderz.lib.FileUtil;
-import mod.hey.studios.util.Helper;
-import mod.jbk.util.LogUtil;
-import mod.remaker.settings.PreferenceContentFragment;
-import mod.remaker.settings.PreferenceFragment;
 import mod.remaker.util.SettingsConstants;
-import mod.remaker.util.SettingsUtils;
 
 public class SettingsUtils {
     public static final List<String> SETTINGS_KEYS = Arrays.asList(
@@ -63,6 +52,14 @@ public class SettingsUtils {
 
             default:
                 throw new IllegalArgumentException("Unknown key '" + key + "'!");
+        }
+    }
+
+    public static ActivityResultContract<String, Boolean> getPermissionContract() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return new RequestStorageManagerPermission();
+        } else {
+            return new RequestPermission();
         }
     }
 }

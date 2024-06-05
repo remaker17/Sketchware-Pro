@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,11 @@ public abstract class PreferenceFragment extends Fragment {
         Fragment contentFragment = getContentFragment();
         View contentView = onCreateContentView(inflater, container);
 
+        if (contentFragment != null && contentView != null) {
+            throw new IllegalStateException("You can't have a content fragment and view at the same time.");
+        }
+
+        binding.appBarLayout.setLiftOnScrollTargetViewId(getScrollTargetViewId());
         binding.toolbar.setNavigationOnClickListener(this::onNavigationClick);
         binding.toolbar.setTitle(getTitle(requireContext()));
 
@@ -40,7 +46,9 @@ public abstract class PreferenceFragment extends Fragment {
                 .addToBackStack(null)
                 .add(binding.preferenceContentContainer.getId(), contentFragment)
                 .commit();
-        } else if (contentView != null) {
+        }
+
+        if (contentView != null) {
             if (contentView.getParent() != null) {
                 ViewGroup parent = (ViewGroup) contentView.getParent();
                 parent.removeView(contentView);
@@ -58,6 +66,11 @@ public abstract class PreferenceFragment extends Fragment {
         } else {
             getActivity().finish();
         }
+    }
+
+    @IdRes
+    protected int getScrollTargetViewId() {
+        return androidx.preference.R.id.recycler_view;
     }
 
     protected Fragment getContentFragment() {

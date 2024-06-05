@@ -10,6 +10,7 @@ public class SettingsConstants {
     public static final String ROOT_AUTO_INSTALL_PROJECTS = "root-auto-install-projects";
     public static final String ROOT_AUTO_OPEN_AFTER_INSTALLING = "root-auto-open-after-installing";
     public static final String BACKUP_FILENAME = "backup-filename";
+    public static final String BACKUP_DIRECTORIES = "backup-dirs";
     public static final String LEGACY_CODE_EDITOR = "legacy-ce";
     public static final String SHOW_BUILT_IN_BLOCKS = "built-in-blocks";
     public static final String SHOW_EVERY_SINGLE_BLOCK = "show-every-single-block";

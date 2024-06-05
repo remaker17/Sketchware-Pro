@@ -20,11 +20,10 @@
         android:summary="Every single available block will be shown. Will slow down opening palettes!"
         android:title="Show all blocks of palettes" />
 
-    <mod.remaker.settings.preference.M3EditTextPreference
+    <Preference
         android:key="backup-dir"
         android:summary="The default directory is /Internal storage/.sketchware/backups/."
-        android:title="Backup directory"
-        app:hint="Directory path" />
+        android:title="Backup directory" />
 
     <SwitchPreferenceCompat
         android:defaultValue="false"

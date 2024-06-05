@@ -2,6 +2,7 @@ package mod.hilal.saif.activities.tools;
 
 import static mod.SketchwareUtil.dpToPx;
 import static mod.SketchwareUtil.getDip;
+import static mod.remaker.settings.model.ItemBackupDirectory.DEFAULT_DIRECTORY;
 import static mod.remaker.util.SettingsConstants.SETTINGS_FILE;
 import static mod.remaker.util.SettingsUtils.SETTINGS_KEYS;
 
@@ -25,11 +26,14 @@ import android.widget.Toast;
 import com.android.annotations.NonNull;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
 import com.topjohnwu.superuser.Shell;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +42,7 @@ import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.LogUtil;
+import mod.remaker.settings.model.ItemBackupDirectory;
 import mod.remaker.util.SettingsConstants;
 import mod.remaker.util.SettingsUtils;
 
@@ -77,6 +82,39 @@ public class ConfigActivity extends Activity {
 
             return toReturnAndSetIfNotFound;
         }
+    }
+
+    public static ArrayList<ItemBackupDirectory> getCustomBackupDirectories() {
+        if (FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
+            JsonObject object = new Gson().fromJson(FileUtil.readFile(SETTINGS_FILE.getAbsolutePath()), JsonObject.class);
+            JsonArray array = object.getAsJsonArray(SettingsConstants.BACKUP_DIRECTORIES);
+
+            ArrayList<ItemBackupDirectory> backupDirectories = new ArrayList<>();
+            backupDirectories.add(DEFAULT_DIRECTORY);
+
+            for (int i = 0; i < array.size(); i++) {
+                File directoryFile = new File(array.get(i).getAsString());
+                ItemBackupDirectory directory = new ItemBackupDirectory(
+                    directoryFile.getName(), directoryFile.getAbsolutePath(),
+                    getCurrentCustomBackupDirectory().path().equals(directoryFile.getAbsolutePath()));
+                backupDirectories.add(directory);
+            }
+
+            return backupDirectories;
+        }
+        return new ArrayList<ItemBackupDirectory>(Arrays.asList(DEFAULT_DIRECTORY));
+    }
+
+    public static ItemBackupDirectory getCurrentCustomBackupDirectory() {
+        if (FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
+            String path = getBackupPath();
+            File dir = new File(path);
+            return new ItemBackupDirectory(dir.getName(), dir.getAbsolutePath(), true);
+        }
+        return DEFAULT_DIRECTORY;
+    }
+
+    public static void addCustomBackupDirectory(ItemBackupDirectory directory) {
     }
 
     public static String getBackupFileName() {

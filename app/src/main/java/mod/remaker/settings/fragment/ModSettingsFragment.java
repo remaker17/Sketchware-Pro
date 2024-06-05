@@ -60,7 +60,7 @@ public class ModSettingsFragment extends PreferenceFragment {
             }
 
             if (preference.getKey().equals(BACKUP_DIRECTORY)) {
-                switchFragment(new ChangeBackupFilenameFormatFragment());
+                switchFragment(new ChangeBackupDirectoryFragment());
             }
 
             return false;
@@ -100,15 +100,9 @@ public class ModSettingsFragment extends PreferenceFragment {
                 }
             }
 
-            // if (preference.getKey().equals(BACKUP_DIRECTORY) && preference instanceof M3EditTextPreference editTextPreference) {
-                // editTextPreference.setText(ConfigActivity.getBackupPath());
-                // editTextPreference.setHelperText("Directory inside /Internal storage/, e.g. sketchware/backups");
-                // editTextPreference.setOnPreferenceChangeListener((pref, value) -> {
-                    // ConfigActivity.changeSetting(BACKUP_DIRECTORY, value);
-                    // SketchwareUtil.toast("Saved");
-                    // return true;
-                // });
-            // }
+            if (preference.getKey().equals(BACKUP_DIRECTORY)) {
+                preference.setSummary(ConfigActivity.getBackupPath());
+            }
 
             if (preference.getKey().equals(BACKUP_FILENAME) && preference instanceof M3EditTextPreference editTextPreference) {
                 editTextPreference.setText(ConfigActivity.getBackupFileName());
@@ -130,12 +124,10 @@ public class ModSettingsFragment extends PreferenceFragment {
             }
         }
 
-        private boolean switchFragment(PreferenceFragment fragment) {
+        private void switchFragment(PreferenceFragment fragment) {
             if (fragment != null && requireActivity() instanceof ExperimentalSettingsActivity activity) {
                 activity.switchFragment(fragment, /* addToBackStack= */ true);
-                return true;
             }
-            return false;
         }
     }
 }

@@ -18,8 +18,7 @@
             app:collapsedTitleTextColor="?attr/colorOnSurface"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:expandedTitleMarginStart="24dp"
-            app:expandedTitleTextColor="?attr/colorOnSurface"
-            app:liftOnScrollTargetViewId="@id/recycler_view">
+            app:expandedTitleTextColor="?attr/colorOnSurface">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"

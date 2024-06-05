@@ -39,7 +39,8 @@ public class TopSettingsFragment extends PreferenceFragment {
                 case KEY_MOD -> new ModSettingsFragment();
                 default -> null;
             };
-            return switchFragment(fragment);
+            switchFragment(fragment);
+            return false;
         }
 
         @Override
@@ -47,12 +48,10 @@ public class TopSettingsFragment extends PreferenceFragment {
             // no-op
         }
 
-        private boolean switchFragment(PreferenceFragment fragment) {
+        private void switchFragment(PreferenceFragment fragment) {
             if (fragment != null && requireActivity() instanceof ExperimentalSettingsActivity activity) {
                 activity.switchFragment(fragment, /* addToBackStack= */ true);
-                return true;
             }
-            return false;
         }
     }
 }
