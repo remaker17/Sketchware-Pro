@@ -2,7 +2,7 @@ package mod.hilal.saif.activities.tools;
 
 import static mod.SketchwareUtil.dpToPx;
 import static mod.SketchwareUtil.getDip;
-import static mod.remaker.settings.model.ItemBackupDirectory.DEFAULT_DIRECTORY;
+import static mod.remaker.settings.model.ItemBackupDirectory.DEFAULT_BACKUP_DIRECTORY;
 import static mod.remaker.util.SettingsConstants.SETTINGS_FILE;
 import static mod.remaker.util.SettingsUtils.SETTINGS_KEYS;
 
@@ -52,7 +52,7 @@ public class ConfigActivity extends Activity {
     private LinearLayout root;
     private HashMap<String, Object> setting_map = new HashMap<>();
 
-    public static String getBackupPath() {
+    public static String getCurrentBackupPath() {
         if (FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
             HashMap<String, Object> settings = getSettings();
             if (settings.containsKey(SettingsConstants.BACKUP_DIRECTORY)) {
@@ -67,7 +67,7 @@ public class ConfigActivity extends Activity {
                 }
             }
         }
-        return DEFAULT_DIRECTORY.path();
+        return DEFAULT_BACKUP_DIRECTORY.path();
     }
 
     public static String getStringSettingValueOrSetAndGet(String settingKey, String toReturnAndSetIfNotFound) {
@@ -86,21 +86,23 @@ public class ConfigActivity extends Activity {
 
     public static ArrayList<ItemBackupDirectory> getCustomBackupDirectories() {
         if (FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
+            ArrayList<ItemBackupDirectory> backupDirectories = new ArrayList<>();
+            backupDirectories.add(DEFAULT_BACKUP_DIRECTORY);
+
             JsonObject object = new Gson().fromJson(FileUtil.readFile(SETTINGS_FILE.getAbsolutePath()), JsonObject.class);
             JsonArray array = object.getAsJsonArray(SettingsConstants.BACKUP_DIRECTORIES);
 
-            ArrayList<ItemBackupDirectory> backupDirectories = new ArrayList<>();
-            backupDirectories.add(DEFAULT_DIRECTORY);
-
-            for (int i = 0; i < array.size(); i++) {
-                File directoryFile = new File(array.get(i).getAsString());
-                ItemBackupDirectory directory = new ItemBackupDirectory(directoryFile.getName(), directoryFile.getAbsolutePath());
-                backupDirectories.add(directory);
+            if (array != null && array.size() != 0) {
+                for (int i = 0; i < array.size(); i++) {
+                    File directoryFile = new File(array.get(i).getAsString());
+                    ItemBackupDirectory directory = new ItemBackupDirectory(directoryFile.getName(), directoryFile.getAbsolutePath());
+                    backupDirectories.add(directory);
+                }
             }
 
             return backupDirectories;
         }
-        return new ArrayList<ItemBackupDirectory>(Arrays.asList(DEFAULT_DIRECTORY));
+        return new ArrayList<>(Arrays.asList(DEFAULT_BACKUP_DIRECTORY));
     }
 
     public static boolean isCurrentBackupDirectory(ItemBackupDirectory directory) {
@@ -109,14 +111,28 @@ public class ConfigActivity extends Activity {
 
     public static ItemBackupDirectory getCurrentCustomBackupDirectory() {
         if (FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
-            String path = getBackupPath();
+            String path = getCurrentBackupPath();
             File dir = new File(path);
-            return new ItemBackupDirectory(dir.getName(), dir.getAbsolutePath());
+            return new ItemBackupDirectory(dir.getName(), path);
         }
-        return DEFAULT_DIRECTORY;
+        return DEFAULT_BACKUP_DIRECTORY;
     }
 
     public static void addCustomBackupDirectory(ItemBackupDirectory directory) {
+        if (!FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
+            return;
+        }
+
+        JsonObject object = new Gson().fromJson(FileUtil.readFile(SETTINGS_FILE.getAbsolutePath()), JsonObject.class);
+        JsonArray array = object.getAsJsonArray(SettingsConstants.BACKUP_DIRECTORIES);
+        if (array == null) {
+            array = new JsonArray();
+        }
+
+        array.add(directory.path());
+        object.add(SettingsConstants.BACKUP_DIRECTORIES, array);
+
+        FileUtil.writeFile(SETTINGS_FILE.getAbsolutePath(), new Gson().toJson(object));
     }
 
     public static String getBackupFileName() {
@@ -309,7 +325,7 @@ public class ConfigActivity extends Activity {
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.MATCH_PARENT));
                     backupDirectory.setTextSize(14.0f);
-                    backupDirectory.setText(getBackupPath());
+                    backupDirectory.setText(getCurrentBackupPath());
                     tilBackupDirectory.addView(backupDirectory);
 
                     new AlertDialog.Builder(this)

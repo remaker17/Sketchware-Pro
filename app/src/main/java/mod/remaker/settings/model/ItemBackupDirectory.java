@@ -6,7 +6,7 @@ import static mod.remaker.util.SettingsUtils.getDefaultValue;
 import java.util.Objects;
 
 public record ItemBackupDirectory(String title, String path) {
-    public static final ItemBackupDirectory DEFAULT_DIRECTORY =
+    public static final ItemBackupDirectory DEFAULT_BACKUP_DIRECTORY =
         new ItemBackupDirectory("Default directory", (String) getDefaultValue(BACKUP_DIRECTORY));
 
     @Override
@@ -14,8 +14,7 @@ public record ItemBackupDirectory(String title, String path) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemBackupDirectory directory = (ItemBackupDirectory) o;
-        return Objects.equals(title, directory.title) &&
-            Objects.equals(path, directory.path);
+        return Objects.equals(title, directory.title) && Objects.equals(path, directory.path);
     }
 
     @Override

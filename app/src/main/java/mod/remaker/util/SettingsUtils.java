@@ -3,10 +3,12 @@ package mod.remaker.util;
 import static mod.remaker.util.SettingsContracts.RequestStorageManagerPermission;
 
 import android.os.Build;
+import android.os.Environment;
 
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +41,8 @@ public class SettingsUtils {
                 return false;
 
             case SettingsConstants.BACKUP_DIRECTORY:
-                return "/.sketchware/backups/";
+                return new File(Environment.getExternalStorageDirectory(), "/.sketchware/backups/")
+                    .getAbsolutePath();
 
             case SettingsConstants.ROOT_AUTO_OPEN_AFTER_INSTALLING:
                 return true;

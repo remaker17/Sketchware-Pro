@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import mod.SketchwareUtil;
 import mod.hilal.saif.activities.tools.ConfigActivity;
-import mod.remaker.settings.DirectoryManager;
+import mod.remaker.settings.BackupDirectoryManager;
 import mod.remaker.settings.PreferenceFragment;
 import mod.remaker.settings.adapter.BackupDirectoryAdapter;
 import mod.remaker.settings.adapter.BackupDirectoryAdapter.OnBackupDirectoryClickListener;
@@ -49,17 +49,17 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
 
     private ArrayList<ItemBackupDirectory> directories;
     private BackupDirectoryAdapter adapter;
-    private DirectoryManager directoryManager;
-    private OnBackupDirectorySelectListener mOnBackupDirectorySelectListener;
+    private BackupDirectoryManager directoryManager;
+    private BackupDirectorySelectListener onBackupDirectorySelectListener;
 
-    public interface OnBackupDirectorySelectListener {
+    public interface BackupDirectorySelectListener {
         void onBackupDirectorySelect(ItemBackupDirectory directory);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        directoryManager = DirectoryManager.getInstance(context);
+        directoryManager = BackupDirectoryManager.getInstance(context);
     }
 
     @Override
@@ -89,15 +89,16 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
         if (TextUtils.isEmpty(item.path())) {
             permissionRequestLauncher.launch(WRITE_EXTERNAL_STORAGE);
         } else {
-            ConfigActivity.changeSetting(BACKUP_DIRECTORY, item.path());
-            if (mOnBackupDirectorySelectListener != null) {
-                mOnBackupDirectorySelectListener.onBackupDirectorySelect(item);
+            if (onBackupDirectorySelectListener != null) {
+                onBackupDirectorySelectListener.onBackupDirectorySelect(item);
             }
+
+            directoryManager.changeDefaultBackupDirectory(item);
         }
     }
 
-    public void setOnBackupDirectorySelectListener(OnBackupDirectorySelectListener onBackupDirectorySelectListener) {
-        mOnBackupDirectorySelectListener = onBackupDirectorySelectListener;
+    public void setOnBackupDirectorySelectListener(BackupDirectorySelectListener listener) {
+        onBackupDirectorySelectListener = listener;
     }
 
     private void refreshDirectories() {
@@ -115,17 +116,32 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
 
         new Thread(() -> {
             directoryManager.takePermissions(uri);
-            File directory = Objects.requireNonNull(directoryManager.resolveUri(getContext(), uri), "Cannot resolve file name of \"" + uri + "\"");
+            File directory = Objects.requireNonNull(directoryManager.resolveUri(getContext(), uri),
+                "Cannot resolve file name of \"" + uri + "\"");
 
             try {
                 if (!directory.canWrite()) {
                     throw new AccessDeniedException(directory.toString());
                 }
             } catch (AccessDeniedException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
 
-            directoryManager.addBackupDirectory(new ItemBackupDirectory(directory.getName(), directory.getAbsolutePath()));
+            ItemBackupDirectory backupDirectory = new ItemBackupDirectory(directory.getName(), directory.getAbsolutePath());
+            directoryManager.addBackupDirectory(backupDirectory, (success, message) -> {
+                getActivity().runOnUiThread(() -> {
+                    if (!TextUtils.isEmpty(message)) {
+                        if (success) {
+                            SketchwareUtil.toast(message);
+                        } else {
+                            SketchwareUtil.toastError(message);
+                        }
+                    }
+                });
+            });
+            directoryManager.changeDefaultBackupDirectory(backupDirectory);
+
+            getActivity().runOnUiThread(() -> refreshDirectories());
         }).start();
     }
 }

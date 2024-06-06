@@ -27,7 +27,7 @@ import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.remaker.settings.ExperimentalSettingsActivity;
 import mod.remaker.settings.PreferenceContentFragment;
 import mod.remaker.settings.PreferenceFragment;
-import mod.remaker.settings.fragment.ChangeBackupDirectoryFragment.OnBackupDirectorySelectListener;
+import mod.remaker.settings.fragment.ChangeBackupDirectoryFragment.BackupDirectorySelectListener;
 import mod.remaker.settings.model.ItemBackupDirectory;
 import mod.remaker.settings.preference.M3EditTextPreference;
 
@@ -44,7 +44,7 @@ public class ModSettingsFragment extends PreferenceFragment {
         return new ModSettingsFragmentContent();
     }
 
-    public static class ModSettingsFragmentContent extends PreferenceContentFragment implements OnBackupDirectorySelectListener {
+    public static class ModSettingsFragmentContent extends PreferenceContentFragment implements BackupDirectorySelectListener {
         private Preference backupPreference;
 
         @Override
@@ -115,7 +115,7 @@ public class ModSettingsFragment extends PreferenceFragment {
 
             if (preference.getKey().equals(BACKUP_DIRECTORY)) {
                 backupPreference = preference;
-                backupPreference.setSummary(ConfigActivity.getBackupPath());
+                backupPreference.setSummary(ConfigActivity.getCurrentBackupPath());
             }
 
             if (preference.getKey().equals(BACKUP_FILENAME) && preference instanceof M3EditTextPreference editTextPreference) {

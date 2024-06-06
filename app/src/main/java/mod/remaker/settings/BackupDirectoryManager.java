@@ -2,6 +2,7 @@ package mod.remaker.settings;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+import static mod.remaker.util.SettingsConstants.BACKUP_DIRECTORY;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -16,29 +17,42 @@ import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.remaker.settings.model.ItemBackupDirectory;
 import mod.remaker.util.UriUtils;
 
-public class DirectoryManager {
-    private static DirectoryManager instance;
+public class BackupDirectoryManager {
+    private static BackupDirectoryManager instance;
     private ContentResolver contentResolver;
 
-    public static DirectoryManager getInstance(Context context) {
+    public static synchronized BackupDirectoryManager getInstance(Context context) {
         if (instance == null) {
-            instance = new DirectoryManager(context);
+            instance = new BackupDirectoryManager(context);
         }
         return instance;
     }
 
-    private DirectoryManager(Context context) {
+    public interface BackupDirectoryAddListener {
+        void onBackupDirectoryAdd(boolean success, String message);
+    }
+
+    private BackupDirectoryManager(Context context) {
         contentResolver = context.getContentResolver();
     }
 
     public ArrayList<ItemBackupDirectory> getBackupDirectories() {
         return ConfigActivity.getCustomBackupDirectories();
-            // .stream().filter(this::isWriteable)
-            // .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void addBackupDirectory(ItemBackupDirectory directory) {
+    public void addBackupDirectory(ItemBackupDirectory directory, BackupDirectoryAddListener listener) {
+        ArrayList<ItemBackupDirectory> backupDirectories = getBackupDirectories();
+        if (backupDirectories.contains(directory)) {
+            listener.onBackupDirectoryAdd(false, "This directory already is in list.");
+            return;
+        }
+
         ConfigActivity.addCustomBackupDirectory(directory);
+        listener.onBackupDirectoryAdd(true, null);
+    }
+
+    public void changeDefaultBackupDirectory(ItemBackupDirectory directory) {
+        ConfigActivity.changeSetting(BACKUP_DIRECTORY, directory.path());
     }
 
     public void takePermissions(Uri uri) {
@@ -53,14 +67,7 @@ public class DirectoryManager {
         }
     }
 
-    public String getDisplayName(File file) {
-        if (file.getAbsolutePath().contains(".sketchware")) {
-            return "Default directory";
-        } else {
-            return file.getName();
-        }
-    }
-
+    // somehow it returns false
     private boolean isWriteable(ItemBackupDirectory directory) {
         File file = new File(directory.path());
         return file != null ? file.canWrite() : false;
