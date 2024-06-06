@@ -11,6 +11,7 @@ import androidx.viewbinding.ViewBinding;
 import com.sketchware.remod.databinding.ItemBackupDirectoryBinding;
 
 import mod.hasrat.lib.CommonViewBindingAdapter;
+import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.remaker.settings.model.ItemBackupDirectory;
 
 public class BackupDirectoryAdapter extends CommonViewBindingAdapter<ItemBackupDirectory> {
@@ -31,10 +32,11 @@ public class BackupDirectoryAdapter extends CommonViewBindingAdapter<ItemBackupD
         if (binding instanceof ItemBackupDirectoryBinding directoryBinding) {
             ItemBackupDirectory directory = getItem(position);
             String path = directory.path();
+            boolean isChecked = ConfigActivity.isCurrentBackupDirectory(directory);
 
             directoryBinding.getRoot().setOnClickListener(v -> listener.onDirectoryClick(directory));
             directoryBinding.title.setText(directory.title());
-            // directoryBinding.indicator.setChecked(directory.isChecked());
+            directoryBinding.indicator.setChecked(isChecked);
 
             if (TextUtils.isEmpty(path)) {
                 directoryBinding.path.setVisibility(View.GONE);

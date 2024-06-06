@@ -27,6 +27,8 @@ import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.remaker.settings.ExperimentalSettingsActivity;
 import mod.remaker.settings.PreferenceContentFragment;
 import mod.remaker.settings.PreferenceFragment;
+import mod.remaker.settings.fragment.ChangeBackupDirectoryFragment.OnBackupDirectorySelectListener;
+import mod.remaker.settings.model.ItemBackupDirectory;
 import mod.remaker.settings.preference.M3EditTextPreference;
 
 public class ModSettingsFragment extends PreferenceFragment {
@@ -42,7 +44,16 @@ public class ModSettingsFragment extends PreferenceFragment {
         return new ModSettingsFragmentContent();
     }
 
-    public static class ModSettingsFragmentContent extends PreferenceContentFragment {
+    public static class ModSettingsFragmentContent extends PreferenceContentFragment implements OnBackupDirectorySelectListener {
+        private Preference backupPreference;
+
+        @Override
+        public void onBackupDirectorySelect(ItemBackupDirectory directory) {
+            if (backupPreference != null) {
+                backupPreference.setSummary(directory.path());
+            }
+        }
+
         @Override
         public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
             setPreferencesFromResource(R.xml.preference_mod, rootKey);
@@ -60,7 +71,9 @@ public class ModSettingsFragment extends PreferenceFragment {
             }
 
             if (preference.getKey().equals(BACKUP_DIRECTORY)) {
-                switchFragment(new ChangeBackupDirectoryFragment());
+                ChangeBackupDirectoryFragment fragment = new ChangeBackupDirectoryFragment();
+                fragment.setOnBackupDirectorySelectListener(this);
+                switchFragment(fragment);
             }
 
             return false;
@@ -101,7 +114,8 @@ public class ModSettingsFragment extends PreferenceFragment {
             }
 
             if (preference.getKey().equals(BACKUP_DIRECTORY)) {
-                preference.setSummary(ConfigActivity.getBackupPath());
+                backupPreference = preference;
+                backupPreference.setSummary(ConfigActivity.getBackupPath());
             }
 
             if (preference.getKey().equals(BACKUP_FILENAME) && preference instanceof M3EditTextPreference editTextPreference) {

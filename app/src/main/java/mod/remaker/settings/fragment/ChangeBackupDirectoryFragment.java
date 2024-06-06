@@ -50,6 +50,11 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
     private ArrayList<ItemBackupDirectory> directories;
     private BackupDirectoryAdapter adapter;
     private DirectoryManager directoryManager;
+    private OnBackupDirectorySelectListener mOnBackupDirectorySelectListener;
+
+    public interface OnBackupDirectorySelectListener {
+        void onBackupDirectorySelect(ItemBackupDirectory directory);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -85,12 +90,19 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
             permissionRequestLauncher.launch(WRITE_EXTERNAL_STORAGE);
         } else {
             ConfigActivity.changeSetting(BACKUP_DIRECTORY, item.path());
+            if (mOnBackupDirectorySelectListener != null) {
+                mOnBackupDirectorySelectListener.onBackupDirectorySelect(item);
+            }
         }
+    }
+
+    public void setOnBackupDirectorySelectListener(OnBackupDirectorySelectListener onBackupDirectorySelectListener) {
+        mOnBackupDirectorySelectListener = onBackupDirectorySelectListener;
     }
 
     private void refreshDirectories() {
         ArrayList<ItemBackupDirectory> backupDirectories = directoryManager.getBackupDirectories();
-        backupDirectories.add(new ItemBackupDirectory("Choose another directory", null, false));
+        backupDirectories.add(new ItemBackupDirectory("Choose another directory", null));
 
         directories = backupDirectories;
         adapter.setItems(directories);
@@ -113,8 +125,7 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
                 throw new RuntimeException(e);
             }
 
-            directoryManager.addBackupDirectory(
-                new ItemBackupDirectory(directory.getName(), directory.getAbsolutePath(), false));
+            directoryManager.addBackupDirectory(new ItemBackupDirectory(directory.getName(), directory.getAbsolutePath()));
         }).start();
     }
 }

@@ -12,7 +12,7 @@
     android:paddingStart="24dp"
     android:paddingTop="20dp">
 
-    <ImageView
+    <mod.remaker.view.CheckableImageView
         android:id="@+id/indicator"
         android:layout_width="24dp"
         android:layout_height="24dp"

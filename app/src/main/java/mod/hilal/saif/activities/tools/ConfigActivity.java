@@ -94,9 +94,7 @@ public class ConfigActivity extends Activity {
 
             for (int i = 0; i < array.size(); i++) {
                 File directoryFile = new File(array.get(i).getAsString());
-                ItemBackupDirectory directory = new ItemBackupDirectory(
-                    directoryFile.getName(), directoryFile.getAbsolutePath(),
-                    getCurrentCustomBackupDirectory().path().equals(directoryFile.getAbsolutePath()));
+                ItemBackupDirectory directory = new ItemBackupDirectory(directoryFile.getName(), directoryFile.getAbsolutePath());
                 backupDirectories.add(directory);
             }
 
@@ -105,11 +103,15 @@ public class ConfigActivity extends Activity {
         return new ArrayList<ItemBackupDirectory>(Arrays.asList(DEFAULT_DIRECTORY));
     }
 
+    public static boolean isCurrentBackupDirectory(ItemBackupDirectory directory) {
+        return getCurrentCustomBackupDirectory().equals(directory);
+    }
+
     public static ItemBackupDirectory getCurrentCustomBackupDirectory() {
         if (FileUtil.isExistFile(SETTINGS_FILE.getAbsolutePath())) {
             String path = getBackupPath();
             File dir = new File(path);
-            return new ItemBackupDirectory(dir.getName(), dir.getAbsolutePath(), true);
+            return new ItemBackupDirectory(dir.getName(), dir.getAbsolutePath());
         }
         return DEFAULT_DIRECTORY;
     }
