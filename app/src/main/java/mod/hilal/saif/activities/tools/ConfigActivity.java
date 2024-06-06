@@ -67,7 +67,7 @@ public class ConfigActivity extends Activity {
                 }
             }
         }
-        return "/.sketchware/backups/";
+        return DEFAULT_DIRECTORY.path();
     }
 
     public static String getStringSettingValueOrSetAndGet(String settingKey, String toReturnAndSetIfNotFound) {

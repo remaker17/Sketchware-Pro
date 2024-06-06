@@ -1,5 +1,6 @@
 package mod.remaker.settings.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +30,18 @@ public class BackupDirectoryAdapter extends CommonViewBindingAdapter<ItemBackupD
     public void onBindView(@NonNull ViewBinding binding, int position) {
         if (binding instanceof ItemBackupDirectoryBinding directoryBinding) {
             ItemBackupDirectory directory = getItem(position);
-            directoryBinding.title.setText(directory.title());
-            directoryBinding.path.setText(directory.path());
-            // directoryBinding.indicator.setChecked(directory.isChecked());
+            String path = directory.path();
+
             directoryBinding.getRoot().setOnClickListener(v -> listener.onDirectoryClick(directory));
+            directoryBinding.title.setText(directory.title());
+            // directoryBinding.indicator.setChecked(directory.isChecked());
+
+            if (TextUtils.isEmpty(path)) {
+                directoryBinding.path.setVisibility(View.GONE);
+            } else {
+                directoryBinding.path.setText(path);
+                directoryBinding.path.setVisibility(View.VISIBLE);
+            }
         }
     }
 

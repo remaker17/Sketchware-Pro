@@ -103,14 +103,14 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
 
         new Thread(() -> {
             directoryManager.takePermissions(uri);
-            File directory = Objects.requireNonNull(directoryManager.resolveUri(uri), "Cannot resolve file name of \"" + uri + "\"");
+            File directory = Objects.requireNonNull(directoryManager.resolveUri(getContext(), uri), "Cannot resolve file name of \"" + uri + "\"");
 
             try {
                 if (!directory.canWrite()) {
                     throw new AccessDeniedException(directory.toString());
                 }
             } catch (AccessDeniedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             directoryManager.addBackupDirectory(

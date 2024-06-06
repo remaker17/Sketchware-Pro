@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.remaker.settings.model.ItemBackupDirectory;
+import mod.remaker.util.UriUtils;
 
 public class DirectoryManager {
     private static DirectoryManager instance;
@@ -31,9 +32,9 @@ public class DirectoryManager {
     }
 
     public ArrayList<ItemBackupDirectory> getBackupDirectories() {
-        return ConfigActivity.getCustomBackupDirectories()
-            .stream().filter(this::isWriteable)
-            .collect(Collectors.toCollection(ArrayList::new));
+        return ConfigActivity.getCustomBackupDirectories();
+            // .stream().filter(this::isWriteable)
+            // .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void addBackupDirectory(ItemBackupDirectory directory) {
@@ -44,13 +45,11 @@ public class DirectoryManager {
         contentResolver.takePersistableUriPermission(uri, FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_WRITE_URI_PERMISSION);
     }
 
-    // must be optimized
-    public File resolveUri(Uri uri) {
+    public File resolveUri(Context context, Uri uri) {
         if (uri.getScheme().equals("file")) {
             return new File(uri.getPath());
         } else {
-            // resolveFile()??
-            throw new IllegalArgumentException("This path doesn't denote a local file.");
+            return UriUtils.resolveFile(context, uri);
         }
     }
 
