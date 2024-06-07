@@ -47,7 +47,6 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
             }
         });
 
-    private ArrayList<ItemBackupDirectory> directories;
     private BackupDirectoryAdapter adapter;
     private BackupDirectoryManager directoryManager;
     private BackupDirectorySelectListener onBackupDirectorySelectListener;
@@ -102,11 +101,12 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
     }
 
     private void refreshDirectories() {
-        ArrayList<ItemBackupDirectory> backupDirectories = directoryManager.getBackupDirectories();
-        backupDirectories.add(new ItemBackupDirectory("Choose another directory", null));
+        new Thread(() -> {
+            ArrayList<ItemBackupDirectory> backupDirectories = directoryManager.getBackupDirectories();
+            backupDirectories.add(new ItemBackupDirectory("Choose another directory", null));
 
-        directories = backupDirectories;
-        adapter.setItems(directories);
+            getActivity().runOnUiThread(() -> adapter.setItems(backupDirectories));
+        }).start();
     }
 
     private void onCustomDirectoryPicked(Uri uri) {

@@ -81,26 +81,26 @@ public class ModSettingsFragment extends PreferenceFragment {
 
         @Override
         public void onSetupPreference(@NonNull Preference preference) {
-            String keyName = preference.getKey();
+            String key = preference.getKey();
             HashMap<String, Object> settingMap = ConfigActivity.getSettings();
 
             if (preference instanceof SwitchPreferenceCompat switchPreference) {
-                if (ConfigActivity.isSettingAvailable(keyName)) {
-                    Object value = settingMap.get(keyName);
+                if (ConfigActivity.isSettingAvailable(key)) {
+                    Object value = settingMap.get(key);
                     if (value == null) {
-                        ConfigActivity.removeSetting(keyName);
+                        ConfigActivity.removeSetting(key);
                     } else {
                         if (value instanceof Boolean) {
                             switchPreference.setChecked((boolean) value);
                         } else {
                             SketchwareUtil.toastError("Detected invalid value for preference \""
                                     + preference.getTitle() + "\". Restoring defaults");
-                            ConfigActivity.removeSetting(keyName);
+                            ConfigActivity.removeSetting(key);
                         }
                     }
                 } else {
-                    boolean defaultValue = Boolean.parseBoolean((String) getDefaultValue(keyName));
-                    ConfigActivity.changeSetting(keyName, defaultValue);
+                    boolean defaultValue = Boolean.parseBoolean((String) getDefaultValue(key));
+                    ConfigActivity.changeSetting(key, defaultValue);
                     switchPreference.setChecked(defaultValue);
                 }
             }
@@ -108,8 +108,7 @@ public class ModSettingsFragment extends PreferenceFragment {
             if (preference.getKey().equals(ROOT_AUTO_INSTALL_PROJECTS) || preference.getKey().equals(ROOT_AUTO_OPEN_AFTER_INSTALLING)) {
                 Shell shell = Shell.getShell();
                 if (!shell.isRoot()) {
-                    preference.setEnabled(false);
-                    preference.setSummary("Not available for non-rooted devices.");
+                    preference.setVisible(false);
                 }
             }
 
