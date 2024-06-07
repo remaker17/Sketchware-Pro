@@ -141,7 +141,13 @@ public class ChangeBackupDirectoryFragment extends PreferenceFragment implements
             });
             directoryManager.changeDefaultBackupDirectory(backupDirectory);
 
-            getActivity().runOnUiThread(() -> refreshDirectories());
+            getActivity().runOnUiThread(() -> {
+                if (onBackupDirectorySelectListener != null) {
+                    onBackupDirectorySelectListener.onBackupDirectorySelect(backupDirectory);
+                }
+
+                refreshDirectories();
+            });
         }).start();
     }
 }

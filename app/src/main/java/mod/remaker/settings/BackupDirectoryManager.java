@@ -40,15 +40,20 @@ public class BackupDirectoryManager {
         return ConfigActivity.getCustomBackupDirectories();
     }
 
+    public void addBackupDirectory(ItemBackupDirectory directory) {
+        addBackupDirectory(directory, null);
+    }
+
     public void addBackupDirectory(ItemBackupDirectory directory, BackupDirectoryAddListener listener) {
-        ArrayList<ItemBackupDirectory> backupDirectories = getBackupDirectories();
-        if (backupDirectories.contains(directory)) {
+        if (getBackupDirectories().contains(directory)) {
             listener.onBackupDirectoryAdd(false, "This directory already is in list.");
             return;
         }
 
         ConfigActivity.addCustomBackupDirectory(directory);
-        listener.onBackupDirectoryAdd(true, null);
+        if (listener != null) {
+            listener.onBackupDirectoryAdd(true, null);
+        }
     }
 
     public void changeDefaultBackupDirectory(ItemBackupDirectory directory) {
