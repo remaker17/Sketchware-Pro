@@ -97,10 +97,6 @@ android {
         viewBinding true
         buildConfig true
     }
-
-    configurations.implementation {
-        exclude group: 'javax.inject', module: 'javax.inject'
-    }
 }
 
 dependencies {
@@ -156,12 +152,14 @@ dependencies {
     minApi21Implementation "org.eclipse.jdt:ecj:3.13.0"
     minApi26Implementation "org.eclipse.jdt:ecj:3.26.0"
 
-    minApi26Implementation "com.github.Cosmic-IDE:kotlinc-android:f49c67a8c0"
+    minApi26Implementation("com.github.Cosmic-IDE:kotlinc-android:f49c67a8c0") {
+        exclude group: 'javax.inject', module: 'javax.inject'
+    }
 
     implementation "com.github.topjohnwu.libsu:core:5.0.4"
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
-    implementation 'javax.inject:javax.inject:1'
+    // implementation 'javax.inject:javax.inject:1'
 
     // Analytics and Crashlytics
     if (analyticsEnabled) {
