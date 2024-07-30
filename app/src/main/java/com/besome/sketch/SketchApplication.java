@@ -17,6 +17,7 @@ import mod.trindadedev.settings.appearance.theme.manage.ThemeManager;
 public class SketchApplication extends Application {
 
     private static Context mApplicationContext;
+    private LogWriter logWriter;
 
     public static Context getContext() {
         return mApplicationContext;
@@ -48,6 +49,15 @@ public class SketchApplication extends Application {
             }
         });
         super.onCreate();
+
         ThemeManager.applyTheme(this, ThemeManager.getCurrentTheme(this));
+        logWriter = new LogWriter(getApplicationContext());
+        logWriter.start();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        logWriter.stop();
     }
 }
